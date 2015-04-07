@@ -18,20 +18,15 @@ control ingress {
  apply(mac_learning);
  apply(routable);
  
-if (ingress_metadata.is_routable == 1 and
-   ingress_metadata.is_multicast == 0) {
+if (ingress_metadata.is_multicast == 0) {
   apply(multicast_routing);
   apply(igmp);
- } 
-
-if (ingress_metadata.is_routable == 1 and
-   ingress_metadata.is_multicast == 0) {
-  apply(unicast_routing);
-  }
-
-if (ingress_metadata.is_multicast == 0) {
+ } else {
+  if (ingress_metadata.is_routable == 1) {
+   apply(unicast_routing);
+  } 
  apply(switching);
  apply(acl);
- }
+}
 }
 
